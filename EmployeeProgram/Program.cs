@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace EmployeeProgram
 {
@@ -32,7 +33,7 @@ namespace EmployeeProgram
             }
             else if (userOption == 2)
             {
-                addEmployeeViaCsv();
+                addEmployeeViaCsv(employeeList);
             }
             else if (userOption == 3)
             {
@@ -64,9 +65,36 @@ namespace EmployeeProgram
             
                 }
 
-        private static void addEmployeeViaCsv()
+        private static void addEmployeeViaCsv(List<Employee> employeeList)
         {
-            throw new NotImplementedException();
+            using (var reader = new StreamReader(@"..\..\MOCK_DATA.csv"))
+            {
+                
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(',');
+
+                   // Console.WriteLine("Output from the CSV file");
+                   // Console.WriteLine(line);
+                   // Console.WriteLine(values[0]);
+                    //Console.WriteLine(employeeList.Count);
+
+                    string firstName = values[0];
+                    string lastName = values[1];
+                    string DOB = values[2];
+                    string startDate = values[3];
+                    string homeTown = values[4];
+                    string department = values[5];
+
+                    Employee newEmployee = new Employee(firstName, lastName, DOB, startDate, homeTown, department);
+                    employeeList.Add(newEmployee);
+
+                }
+                Console.WriteLine("Employees added from csv file!");
+                //Console.ReadLine();
+            }
+            showMenu(employeeList);
         }
 
         private static List<Employee>  addEmployeeManually(List<Employee> employeeList)
@@ -76,9 +104,9 @@ namespace EmployeeProgram
             Console.Write("Enter last name: ");
             string lastName = Console.ReadLine();
             Console.Write("Enter date of birth: ");
-            float DOB = Convert.ToSingle(Console.ReadLine());
+            string DOB = Console.ReadLine();
             Console.Write("Enter start date: ");
-            float startDate = Convert.ToSingle(Console.ReadLine());
+            string startDate = Console.ReadLine();
             Console.Write("Enter home town: ");
             string homeTown = Console.ReadLine();
             Console.Write("Enter department: ");

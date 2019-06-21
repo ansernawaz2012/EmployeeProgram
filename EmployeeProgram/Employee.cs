@@ -10,18 +10,18 @@ namespace EmployeeProgram
     {
         public string  firstName { get; set; }
         public string lastName { get; set; }
-        public float DOB { get; set; }
-        public float startDate { get; set; }
+        public string DOB { get; set; }
+        public string startDate { get; set; }
         public string homeTown { get; set; }
         public  string department { get; set; }
 
 
-        public Employee(string firstName, string lastName, float DOB, float startDate, string homeTown, string department)
+        public Employee(string firstName, string lastName, string DOB, string startDate, string homeTown, string department)
         {
             this.firstName = firstName;
             this.lastName = lastName;
             this.DOB = DOB;
-            this.startDate = startDate;
+            this.startDate = startDate;  
             this.homeTown = homeTown;
             this.department = department;
     }
