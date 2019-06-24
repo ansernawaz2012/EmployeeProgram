@@ -12,14 +12,12 @@ namespace EmployeeProgram
     {
         static void Main(string[] args)
         {
-
+            //Initialize empty list containing employee objects
             List<Employee> employeeList = new List<Employee>();
             showMenu(employeeList);
-
             
         }
 
-        //Initialize empty list containing employee objects
         private static void showMenu(List<Employee> employeeList)
         {
             Console.WriteLine("Welcome to the Employee program \nSelect an option:");
@@ -27,7 +25,7 @@ namespace EmployeeProgram
             Console.WriteLine("2 - Add a new employee");
             Console.WriteLine("3 - Edit an existing employee");
             Console.WriteLine("4 - Remove existing employee");
-            Console.WriteLine("5 - List employees with a work anniversary withing the next month");
+            Console.WriteLine("5 - List employees with a work anniversary within the next month");
             Console.WriteLine("6 - List average age of employees in each department");
             Console.WriteLine("7 - List number of employees in each town");
             Console.WriteLine("8 - Add employee via csv");
@@ -37,7 +35,7 @@ namespace EmployeeProgram
             //Get input from user
             string input = Console.ReadLine();
             int userOption;
-
+            //Force user to enter number
             while (!Int32.TryParse(input, out userOption))
 
             {
@@ -81,23 +79,7 @@ namespace EmployeeProgram
                     break;
             }
 
-            //if (userOption == 1)
-            //{
-            //    addEmployeeManually(employeeList);
-            //    showMenu(employeeList);
-            //}
-            //else if (userOption == 2)
-            //{
-            //    addEmployeeViaCsv(employeeList);
-            //}
-            //else if (userOption == 3)
-            //{
-            //    showEmployees(employeeList);
-            //}
-            //else if (userOption == 4)
-            //{
-            //    Environment.Exit(0);
-            //}
+            
 
             showMenu(employeeList);
            // Console.ReadLine();
@@ -163,7 +145,6 @@ namespace EmployeeProgram
         {
             // retrieve path of data from config file
             string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
-            //using (var reader = new StreamReader(@"..\..\MOCK_DATA.csv"))
             using (var reader = new StreamReader(databasePath))
 
             {
@@ -199,6 +180,7 @@ namespace EmployeeProgram
 
         private static List<Employee>  addEmployeeManually(List<Employee> employeeList)
         {
+
             Console.Write("Enter first name: ");
             string firstName = Console.ReadLine();
             Console.Write("Enter last name: ");
@@ -220,6 +202,15 @@ namespace EmployeeProgram
 
             Employee newEmployee = new Employee(firstName, lastName, DOB, startDate, homeTown, department);
             employeeList.Add(newEmployee);
+
+            string newEmployeeDetails = $"\n{firstName},{lastName},{stringDOB},{stringStartDate},{homeTown},{department}";
+
+            string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
+            StreamWriter sw = new StreamWriter(databasePath, true);
+            sw.WriteLine(newEmployeeDetails);
+            sw.Close(); 
+
+
 
             Console.WriteLine("New employee added");
             Console.ReadLine();
