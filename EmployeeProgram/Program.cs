@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Configuration;
 
 namespace EmployeeProgram
 {
@@ -18,33 +19,116 @@ namespace EmployeeProgram
             
         }
 
+        //Initialize empty list containing employee objects
         private static void showMenu(List<Employee> employeeList)
         {
             Console.WriteLine("Welcome to the Employee program \nSelect an option:");
-            Console.WriteLine("1 - Add employee manually: \n2 - Add employee via csv file:");
-            Console.WriteLine("3 - List all employees:");
-            Console.WriteLine("4 - Exit");
-            int userOption = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("1 - Show all employees");
+            Console.WriteLine("2 - Add a new employee");
+            Console.WriteLine("3 - Edit an existing employee");
+            Console.WriteLine("4 - Remove existing employee");
+            Console.WriteLine("5 - List employees with a work anniversary withing the next month");
+            Console.WriteLine("6 - List average age of employees in each department");
+            Console.WriteLine("7 - List number of employees in each town");
+            Console.WriteLine("8 - Add employee via csv");
 
-            if (userOption == 1)
+            Console.WriteLine("0 - Exit");
+
+            //Get input from user
+            string input = Console.ReadLine();
+            int userOption;
+
+            while (!Int32.TryParse(input, out userOption))
+
             {
-                addEmployeeManually(employeeList);
-                showMenu(employeeList);
-            }
-            else if (userOption == 2)
-            {
-                addEmployeeViaCsv(employeeList);
-            }
-            else if (userOption == 3)
-            {
-                showEmployees(employeeList);
-            }
-            else if (userOption == 4)
-            {
-                Environment.Exit(0);
+                Console.Write
+                    ("Invalid input. Please enter a number: ");
+                input = Console.ReadLine();
             }
 
-            Console.ReadLine();
+            // Allow users to only select options 0 to 8
+            switch (userOption)
+            {
+                case 1:
+                    showEmployees(employeeList);
+                    break;
+                case 2:
+                    addEmployeeManually(employeeList);
+                    break;
+                case 3:
+                    editEmployee(employeeList);
+                    break;
+                case 4:
+                    removeEmployee(employeeList);
+                    break;
+                case 5:
+                    showEmployeeWithAnniversary(employeeList);
+                    break;
+                case 6:
+                    averageEmployeeAgeInDept(employeeList);
+                    break;
+                case 7:
+                    employeesPerTown(employeeList);
+                    break;
+                case 8:
+                    addEmployeeViaCsv(employeeList);
+                    break;
+                case 0:
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Please select an option from 0 to 7");
+                    break;
+            }
+
+            //if (userOption == 1)
+            //{
+            //    addEmployeeManually(employeeList);
+            //    showMenu(employeeList);
+            //}
+            //else if (userOption == 2)
+            //{
+            //    addEmployeeViaCsv(employeeList);
+            //}
+            //else if (userOption == 3)
+            //{
+            //    showEmployees(employeeList);
+            //}
+            //else if (userOption == 4)
+            //{
+            //    Environment.Exit(0);
+            //}
+
+            showMenu(employeeList);
+           // Console.ReadLine();
+        }
+
+        // Method to show number of employees for a given town
+        private static void employeesPerTown(List<Employee> employeeList)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Method to show calculate average age for a given department
+        private static void averageEmployeeAgeInDept(List<Employee> employeeList)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void showEmployeeWithAnniversary(List<Employee> employeeList)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void removeEmployee(List<Employee> employeeList)
+        {
+            throw new NotImplementedException();
+        }
+
+        //edit employee method
+        private static void editEmployee(List<Employee> employeeList)
+        {
+            throw new NotImplementedException();
         }
 
         private static void showEmployees(List<Employee> employeeList)
@@ -54,36 +138,52 @@ namespace EmployeeProgram
             Console.WriteLine("List of employees:");
             for (int i = 0; i < employeeList.Count; i++)
             {
-                // Console.WriteLine(employeeList[i].firstName);
+                // Print out details of each employee
                 employeeList[i].showDetails();
             }
 
+
+            // List employees using Linq
+           // var listOfEmployees = employeeList
+           //.Select(e => new { e.Item1, e.Item2, e.Item3, e.Item4, e.Item5, e.Item6 });
+
             
 
-            Console.ReadLine();
-            showMenu(employeeList);
-            
-                }
+           // foreach (var employee in listOfEmployees)
+           // {
+           //     Console.WriteLine($"Name: {employee.Item1} {employee.Item2} DOB: {employee.Item3} Start Date: {employee.Item4} Home Town: {employee.Item5} Dept: {employee.Item6}");            }
+
+
+            // Console.ReadLine();
+            // showMenu(employeeList);
+
+        }
 
         private static void addEmployeeViaCsv(List<Employee> employeeList)
         {
-            using (var reader = new StreamReader(@"..\..\MOCK_DATA.csv"))
+            // retrieve path of data from config file
+            string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
+            //using (var reader = new StreamReader(@"..\..\MOCK_DATA.csv"))
+            using (var reader = new StreamReader(databasePath))
+
             {
-                
+
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
                     var values = line.Split(',');
 
-                   // Console.WriteLine("Output from the CSV file");
-                   // Console.WriteLine(line);
-                   // Console.WriteLine(values[0]);
-                    //Console.WriteLine(employeeList.Count);
-
+                   
+                    // assign each value from values array to corresponding field
                     string firstName = values[0];
                     string lastName = values[1];
-                    string DOB = values[2];
-                    string startDate = values[3];
+                    string stringDOB = values[2];
+                    // convert DOB string to a DateTime object
+                    DateTime DOB = DateConvertor.stringToDateObject(stringDOB);
+
+                    string stringStartDate = values[3];
+                    DateTime startDate = DateConvertor.stringToDateObject(stringStartDate);
+
                     string homeTown = values[4];
                     string department = values[5];
 
@@ -104,9 +204,15 @@ namespace EmployeeProgram
             Console.Write("Enter last name: ");
             string lastName = Console.ReadLine();
             Console.Write("Enter date of birth: ");
-            string DOB = Console.ReadLine();
+            string stringDOB = Console.ReadLine();
+
+            DateTime DOB = DateConvertor.stringToDateObject(stringDOB);
+
             Console.Write("Enter start date: ");
-            string startDate = Console.ReadLine();
+            string stringStartDate = Console.ReadLine();
+
+            DateTime startDate = DateConvertor.stringToDateObject(stringStartDate);
+
             Console.Write("Enter home town: ");
             string homeTown = Console.ReadLine();
             Console.Write("Enter department: ");
