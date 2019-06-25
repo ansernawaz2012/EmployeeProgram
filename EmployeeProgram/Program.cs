@@ -118,22 +118,24 @@ namespace EmployeeProgram
             //employeeList = employeeList.Select(n=>n).ToList();
 
             Console.WriteLine("List of employees:");
-            for (int i = 0; i < employeeList.Count; i++)
-            {
-                // Print out details of each employee
-                employeeList[i].showDetails();
-            }
+            //for (int i = 0; i < employeeList.Count; i++)
+            //{
+            //    // Print out details of each employee
+            //    employeeList[i].showDetails();
+            //}
 
 
             // List employees using Linq
-           // var listOfEmployees = employeeList
-           //.Select(e => new { e.Item1, e.Item2, e.Item3, e.Item4, e.Item5, e.Item6 });
+            var listOfEmployees = employeeList
+                .OrderByDescending(e =>e.startDate)
+                .Select(e => e);
 
-            
 
-           // foreach (var employee in listOfEmployees)
-           // {
-           //     Console.WriteLine($"Name: {employee.Item1} {employee.Item2} DOB: {employee.Item3} Start Date: {employee.Item4} Home Town: {employee.Item5} Dept: {employee.Item6}");            }
+
+            foreach (var employee in listOfEmployees)
+            {
+                Console.WriteLine($"Name: {employee.firstName} {employee.lastName} DOB: {employee.DOB} Start Date: {employee.startDate} Home Town: {employee.homeTown} Dept: {employee.department}");
+            }
 
 
             // Console.ReadLine();
