@@ -80,7 +80,6 @@ namespace EmployeeProgram
             }
 
             
-
             ShowMenu(employeeList);
            // Console.ReadLine();
         }
@@ -103,12 +102,10 @@ namespace EmployeeProgram
                 Console.WriteLine(x);
             }
 
-            
-
-        }
+           }
 
         /// <summary>
-        /// Method to show calculate average employee age for a given department
+        /// Method to calculate average employee age for each department
         /// </summary>
         /// <param name="employeeList"></param>        
         private static void AverageEmployeeAgeInDept(List<Employee> employeeList)
@@ -119,28 +116,40 @@ namespace EmployeeProgram
                 employee.age = DateConvertor.GetEmployeeAge(employee.DOB);
             }
 
-
             var results = employeeList
                           .GroupBy(e => e.department)
                           .Select(e => new { Department = e.Key, NumberOfEmployees = e.Count(), TotalAge = e.Sum(x=>x.age) });
 
             Console.WriteLine("Average age of employees per department.");
 
+
             foreach (var x in results)
             {
                 Console.WriteLine($"The average age for {x.Department} is {x.TotalAge / x.NumberOfEmployees}");
             }
-
-            
-
+                        
         }
-
+        /// <summary>
+        /// List of employees 
+        /// </summary>
+        /// <param name="employeeList"></param>
         private static void ShowEmployeeWithAnniversary(List<Employee> employeeList)
         {
-            throw new NotImplementedException();
+            foreach (var employee in employeeList)
+            {
+                var currentDayOfYear = DateTime.Now.DayOfYear;
+                var empStartDate = employee.startDate.DayOfYear;
+                if (empStartDate - currentDayOfYear <= 30 && empStartDate > currentDayOfYear )
+                {
+                    Console.WriteLine($"{employee.firstName} with a start date of {employee.startDate} has an anniversary within 30 days");
+                }
+            }
         }
 
-        // Remove employee 
+        /// <summary>
+        /// Remove an employee from current list
+        /// </summary>
+        /// <param name="employeeList"></param>
         private static void RemoveEmployee(List<Employee> employeeList)
         {
             throw new NotImplementedException();
@@ -153,7 +162,10 @@ namespace EmployeeProgram
         }
 
 
-
+        /// <summary>
+        /// Display list of employees 
+        /// </summary>
+        /// <param name="employeeList"></param>
         private static void ShowEmployees(List<Employee> employeeList)
         {
             //employeeList = employeeList.Select(n=>n).ToList();
@@ -175,7 +187,12 @@ namespace EmployeeProgram
 
             foreach (var employee in listOfEmployees)
             {
-                Console.WriteLine($"Name: {employee.firstName} {employee.lastName} DOB: {employee.DOB} Start Date: {employee.startDate} Home Town: {employee.homeTown} Dept: {employee.department}");
+                Console.WriteLine($"Name: {employee.firstName} {employee.lastName} ");
+                Console.WriteLine($"DOB: {employee.DOB}");
+                Console.WriteLine($"Start Date: {employee.startDate}");
+                Console.WriteLine($"Home Town: {employee.homeTown}");
+                Console.WriteLine($"Dept: {employee.department}");
+                Console.WriteLine("-------------------------------------");
             }
 
 
@@ -191,7 +208,6 @@ namespace EmployeeProgram
             using (var reader = new StreamReader(databasePath))
 
             {
-
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
@@ -202,6 +218,7 @@ namespace EmployeeProgram
                     string firstName = values[0];
                     string lastName = values[1];
                     string stringDOB = values[2];
+                   
                     // convert DOB string to a DateTime object
                     DateTime DOB = DateConvertor.StringToDateObject(stringDOB);
 
@@ -256,17 +273,11 @@ namespace EmployeeProgram
             StreamWriter sw = new StreamWriter(databasePath, true);
             sw.WriteLine(newEmployeeDetails);
             sw.Close(); 
-
-
-
+            
             Console.WriteLine("New employee added");
             Console.ReadLine();
 
             return employeeList;
-
-
-
-
 
         }
     }

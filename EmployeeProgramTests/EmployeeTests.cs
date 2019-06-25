@@ -19,13 +19,13 @@ namespace EmployeeProgram.Tests
 
             //Act
 
-            var expected;
+           // var expected;
 
-            var actual; 
+           // var actual; 
 
             //Assert
 
-            Assert.AreEqual(expected, actual);
+           // Assert.AreEqual(expected, actual);
         }
     }
 }
