@@ -211,7 +211,7 @@ namespace EmployeeProgram
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
-                    var values = line.Split(',');
+                    var values = line.Split(',');   
 
                    
                     // assign each value from values array to corresponding field
