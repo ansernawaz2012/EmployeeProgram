@@ -14,11 +14,11 @@ namespace EmployeeProgram
         {
             //Initialize empty list containing employee objects
             List<Employee> employeeList = new List<Employee>();
-            showMenu(employeeList);
+            ShowMenu(employeeList);
             
         }
 
-        private static void showMenu(List<Employee> employeeList)
+        private static void ShowMenu(List<Employee> employeeList)
         {
             Console.WriteLine("Welcome to the Employee program \nSelect an option:");
             Console.WriteLine("1 - Show all employees");
@@ -35,9 +35,9 @@ namespace EmployeeProgram
             //Get input from user
             string input = Console.ReadLine();
             int userOption;
+            
             //Force user to enter number
             while (!Int32.TryParse(input, out userOption))
-
             {
                 Console.Write
                     ("Invalid input. Please enter a number: ");
@@ -48,28 +48,28 @@ namespace EmployeeProgram
             switch (userOption)
             {
                 case 1:
-                    showEmployees(employeeList);
+                    ShowEmployees(employeeList);
                     break;
                 case 2:
-                    addEmployeeManually(employeeList);
+                    AddEmployeeManually(employeeList);
                     break;
                 case 3:
-                    editEmployee(employeeList);
+                    EditEmployee(employeeList);
                     break;
                 case 4:
-                    removeEmployee(employeeList);
+                    RemoveEmployee(employeeList);
                     break;
                 case 5:
-                    showEmployeeWithAnniversary(employeeList);
+                    ShowEmployeeWithAnniversary(employeeList);
                     break;
                 case 6:
-                    averageEmployeeAgeInDept(employeeList);
+                    AverageEmployeeAgeInDept(employeeList);
                     break;
                 case 7:
-                    employeesPerTown(employeeList);
+                    EmployeesPerTown(employeeList);
                     break;
                 case 8:
-                    addEmployeeViaCsv(employeeList);
+                    AddEmployeeViaCsv(employeeList);
                     break;
                 case 0:
                     Environment.Exit(0);
@@ -81,39 +81,80 @@ namespace EmployeeProgram
 
             
 
-            showMenu(employeeList);
+            ShowMenu(employeeList);
            // Console.ReadLine();
         }
 
-        // Method to show number of employees for a given town
-        private static void employeesPerTown(List<Employee> employeeList)
+        /// <summary>
+        ///  Method to show number of employees for each town
+        /// </summary>
+        /// <param name="employeeList"></param>
+        private static void EmployeesPerTown(List<Employee> employeeList)
+        {
+            var results = employeeList
+                          .GroupBy(e => e.homeTown)
+                          .Select(e => new { Hometown = e.Key, NumberOfEmployees = e.Count() });
+
+            //var groupedEmploeesByDepartment = empdep.GroupBy(x => x.Department).Select(x => new { Department = x.Key, EmployeesCount = x.Count() });
+            Console.WriteLine("Number of employees per town.");
+
+            foreach (var x in results)
+            {
+                Console.WriteLine(x);
+            }
+
+            
+
+        }
+
+        /// <summary>
+        /// Method to show calculate average employee age for a given department
+        /// </summary>
+        /// <param name="employeeList"></param>        
+        private static void AverageEmployeeAgeInDept(List<Employee> employeeList)
+        {
+            //Populate age field using date of birth 
+            foreach (var employee in employeeList)
+            {
+                employee.age = DateConvertor.GetEmployeeAge(employee.DOB);
+            }
+
+
+            var results = employeeList
+                          .GroupBy(e => e.department)
+                          .Select(e => new { Department = e.Key, NumberOfEmployees = e.Count(), TotalAge = e.Sum(x=>x.age) });
+
+            Console.WriteLine("Average age of employees per department.");
+
+            foreach (var x in results)
+            {
+                Console.WriteLine($"The average age for {x.Department} is {x.TotalAge / x.NumberOfEmployees}");
+            }
+
+            
+
+        }
+
+        private static void ShowEmployeeWithAnniversary(List<Employee> employeeList)
         {
             throw new NotImplementedException();
         }
 
-        // Method to show calculate average age for a given department
-        private static void averageEmployeeAgeInDept(List<Employee> employeeList)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static void showEmployeeWithAnniversary(List<Employee> employeeList)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static void removeEmployee(List<Employee> employeeList)
+        // Remove employee 
+        private static void RemoveEmployee(List<Employee> employeeList)
         {
             throw new NotImplementedException();
         }
 
         //edit employee method
-        private static void editEmployee(List<Employee> employeeList)
+        private static void EditEmployee(List<Employee> employeeList)
         {
             throw new NotImplementedException();
         }
 
-        private static void showEmployees(List<Employee> employeeList)
+
+
+        private static void ShowEmployees(List<Employee> employeeList)
         {
             //employeeList = employeeList.Select(n=>n).ToList();
 
@@ -121,7 +162,7 @@ namespace EmployeeProgram
             //for (int i = 0; i < employeeList.Count; i++)
             //{
             //    // Print out details of each employee
-            //    employeeList[i].showDetails();
+            //    employeeList[i].ShowDetails();
             //}
 
 
@@ -143,7 +184,7 @@ namespace EmployeeProgram
 
         }
 
-        private static void addEmployeeViaCsv(List<Employee> employeeList)
+        private static void AddEmployeeViaCsv(List<Employee> employeeList)
         {
             // retrieve path of data from config file
             string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
@@ -162,10 +203,10 @@ namespace EmployeeProgram
                     string lastName = values[1];
                     string stringDOB = values[2];
                     // convert DOB string to a DateTime object
-                    DateTime DOB = DateConvertor.stringToDateObject(stringDOB);
+                    DateTime DOB = DateConvertor.StringToDateObject(stringDOB);
 
                     string stringStartDate = values[3];
-                    DateTime startDate = DateConvertor.stringToDateObject(stringStartDate);
+                    DateTime startDate = DateConvertor.StringToDateObject(stringStartDate);
 
                     string homeTown = values[4];
                     string department = values[5];
@@ -177,10 +218,14 @@ namespace EmployeeProgram
                 Console.WriteLine("Employees added from csv file!");
                 //Console.ReadLine();
             }
-            showMenu(employeeList);
+            ShowMenu(employeeList);
         }
-
-        private static List<Employee>  addEmployeeManually(List<Employee> employeeList)
+        /// <summary>
+        /// Add new employee manually
+        /// </summary>
+        /// <param name="employeeList"></param>
+        /// <returns></returns>
+        private static List<Employee>  AddEmployeeManually(List<Employee> employeeList)
         {
 
             Console.Write("Enter first name: ");
@@ -190,12 +235,12 @@ namespace EmployeeProgram
             Console.Write("Enter date of birth: ");
             string stringDOB = Console.ReadLine();
 
-            DateTime DOB = DateConvertor.stringToDateObject(stringDOB);
+            DateTime DOB = DateConvertor.StringToDateObject(stringDOB);
 
             Console.Write("Enter start date: ");
             string stringStartDate = Console.ReadLine();
 
-            DateTime startDate = DateConvertor.stringToDateObject(stringStartDate);
+            DateTime startDate = DateConvertor.StringToDateObject(stringStartDate);
 
             Console.Write("Enter home town: ");
             string homeTown = Console.ReadLine();

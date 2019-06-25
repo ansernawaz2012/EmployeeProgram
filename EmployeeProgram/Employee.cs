@@ -13,7 +13,8 @@ namespace EmployeeProgram
         public DateTime DOB { get; set; }
         public DateTime startDate { get; set; }
         public string homeTown { get; set; }
-        public  string department { get; set; }
+        public string department { get; set; }
+        public int age { get; set; }
 
 
         public Employee(string firstName, string lastName, DateTime DOB, DateTime startDate, string homeTown, string department)
@@ -24,13 +25,17 @@ namespace EmployeeProgram
             this.startDate = startDate;  
             this.homeTown = homeTown;
             this.department = department;
+        
     }
-
-        public void showDetails()
+        /// <summary>
+        /// Method to display employee details
+        /// </summary>
+        public void ShowDetails()
         {
             Console.WriteLine($"Name: {firstName} {lastName} DOB: {DOB} Start Date: {startDate} Home Town: {homeTown} Dept: {department}");
         }
 
+        
     }
 
     
