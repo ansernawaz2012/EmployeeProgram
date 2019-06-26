@@ -21,6 +21,9 @@ namespace EmployeeProgram
 
         private static void ShowMenu(List<Employee> employeeList)
         {
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
+
             Console.WriteLine("Welcome to the Employee program \nSelect an option:");
             Console.WriteLine("1 - Show all employees");
             Console.WriteLine("2 - Add a new employee");
@@ -29,7 +32,7 @@ namespace EmployeeProgram
             Console.WriteLine("5 - List employees with a work anniversary within the next month");
             Console.WriteLine("6 - List average age of employees in each department");
             Console.WriteLine("7 - List number of employees in each town");
-         //   Console.WriteLine("8 - Add employee via csv");
+         
 
             Console.WriteLine("0 - Exit");
 
@@ -82,7 +85,7 @@ namespace EmployeeProgram
 
             
             ShowMenu(employeeList);
-           // Console.ReadLine();
+          
         }
 
         /// <summary>
@@ -92,15 +95,14 @@ namespace EmployeeProgram
         private static void EmployeesPerTown(List<Employee> employeeList)
         {
             var results = employeeList
-                          .GroupBy(e => e.homeTown)
+                          .GroupBy(e => e.HomeTown)
                           .Select(e => new { Hometown = e.Key, NumberOfEmployees = e.Count() });
 
-            //var groupedEmploeesByDepartment = empdep.GroupBy(x => x.Department).Select(x => new { Department = x.Key, EmployeesCount = x.Count() });
             Console.WriteLine("Number of employees per town.");
 
             foreach (var x in results)
             {
-                Console.WriteLine(x);
+                Console.WriteLine($"The number of employees from {x.Hometown} is {x.NumberOfEmployees}");
             }
 
            }
@@ -112,14 +114,14 @@ namespace EmployeeProgram
         private static void AverageEmployeeAgeInDept(List<Employee> employeeList)
         {
             //Populate age field using date of birth 
-            foreach (var employee in employeeList)
-            {
-                employee.age = DateConvertor.GetEmployeeAge(employee.DOB);
-            }
+            //foreach (var employee in employeeList)
+            //{
+            //    employee.Age = DateConvertor.GetEmployeeAge(employee.DOB);
+            //}
 
             var results = employeeList
-                          .GroupBy(e => e.department)
-                          .Select(e => new { Department = e.Key, NumberOfEmployees = e.Count(), TotalAge = e.Sum(x=>x.age) });
+                          .GroupBy(e => e.Department)
+                          .Select(e => new { Department = e.Key, NumberOfEmployees = e.Count(), TotalAge = e.Sum(x=>x.Age) });
 
             Console.WriteLine("Average age of employees per department.");
 
@@ -139,10 +141,10 @@ namespace EmployeeProgram
             foreach (var employee in employeeList)
             {
                 var currentDayOfYear = DateTime.Now.DayOfYear;
-                var empStartDate = employee.startDate.DayOfYear;
+                var empStartDate = employee.StartDate.DayOfYear;
                 if (empStartDate - currentDayOfYear <= 30 && empStartDate > currentDayOfYear )
                 {
-                    Console.WriteLine($"{employee.firstName} with a start date of {employee.startDate} has an anniversary within 30 days");
+                    Console.WriteLine($"{employee.FirstName} with a start date of {employee.StartDate} has an anniversary within 30 days");
                 }
             }
         }
@@ -157,10 +159,10 @@ namespace EmployeeProgram
             int id = Convert.ToInt32(Console.ReadLine());
 
 
-            var removeItem = employeeList.FirstOrDefault(e => e.employeeId == id);
+            var removeItem = employeeList.FirstOrDefault(e => e.EmployeeId == id);
             if(removeItem != null)
             {
-                Console.WriteLine($"{removeItem.firstName} with ID {removeItem.employeeId} will be removed!"); 
+                Console.WriteLine($"{removeItem.FirstName} with ID {removeItem.EmployeeId} will be removed!"); 
                 employeeList.Remove(removeItem);
                 WriteToCsv(employeeList);
                 
@@ -171,28 +173,35 @@ namespace EmployeeProgram
             }
 
             return employeeList;
-
-
-            //var result = employeeList.Where(e => e.employeeId == id)
-            //             .Select(e => e);
-
-            //if (result.Count() == 0)
-            //{
-            //    Console.WriteLine("Record not found!");
-            //}
-            //else
-            //{
-            //    for
-
-            //    WriteToCsv(employeeList);
-            //    return employeeList;
-            //}
+                                  
         }
 
         //edit employee method
         private static List<Employee> EditEmployee(List<Employee> employeeList)
         {
-            throw new NotImplementedException();
+
+            Console.Write("Enter the ID of the employee you wish to edit:");
+            int id = Convert.ToInt32(Console.ReadLine());
+
+
+            var editItem = employeeList.FirstOrDefault(e => e.EmployeeId == id);
+            if (editItem != null)
+            {
+                Console.WriteLine($"Record found - Name: {editItem.FirstName} {editItem.LastName} ID: {editItem.EmployeeId} DOB: {editItem.DOB} StartDate: {editItem.StartDate} ");
+                Console.WriteLine($"Enter new date of birth for {editItem.FirstName}");
+                var stringDOB = Console.ReadLine();
+                var DOB = DateConvertor.StringToDateObject(stringDOB);
+
+                editItem.DOB = DOB;
+                WriteToCsv(employeeList);
+                Console.WriteLine("Record updated!");
+            }
+            else
+            {
+                Console.WriteLine("Record not found");
+            }
+
+            return employeeList;
         }
 
 
@@ -211,19 +220,19 @@ namespace EmployeeProgram
 
             // List employees using Linq
             var listOfEmployees = employeeList
-                .OrderBy(e =>e.employeeId)
+                .OrderBy(e =>e.EmployeeId)
                 .Select(e => e);
 
 
 
             foreach (var employee in listOfEmployees)
             {
-                Console.WriteLine($"Name: {employee.firstName} {employee.lastName} ");
-                Console.WriteLine($"ID: {employee.employeeId}");
+                Console.WriteLine($"Name: {employee.FirstName} {employee.LastName} ");
+                Console.WriteLine($"ID: {employee.EmployeeId}");
                 Console.WriteLine($"DOB: {employee.DOB}");
-                Console.WriteLine($"Start Date: {employee.startDate}");
-                Console.WriteLine($"Home Town: {employee.homeTown}");
-                Console.WriteLine($"Dept: {employee.department}");
+                Console.WriteLine($"Start Date: {employee.StartDate}");
+                Console.WriteLine($"Home Town: {employee.HomeTown}");
+                Console.WriteLine($"Dept: {employee.Department}");
                 Console.WriteLine("-------------------------------------");
             }
 
@@ -232,43 +241,46 @@ namespace EmployeeProgram
 
         }
 
-        private static void AddEmployeeViaCsv(List<Employee> employeeList)
-        {
-            // retrieve path of data from config file
-            string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
-            using (var reader = new StreamReader(databasePath))
+        //used for testing purposes
+        //private static void AddEmployeeViaCsv(List<Employee> employeeList)
+        //{
+        //    // retrieve path of data from config file
+        //    string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
+        //    using (var reader = new StreamReader(databasePath))
 
-            {
-                while (!reader.EndOfStream)
-                {
-                    var line = reader.ReadLine();
-                    var values = line.Split(',');
+        //    {
+        //        while (!reader.EndOfStream)
+        //        {
+        //            var line = reader.ReadLine();
+        //            var values = line.Split(',');
 
 
-                    // assign each value from values array to corresponding field
-                    int employeeId = Convert.ToInt32(values[0]);
-                    string firstName = values[1];
-                    string lastName = values[2];
-                    string stringDOB = values[3];
+        //            // assign each value from values array to corresponding field
+        //            int employeeId = Convert.ToInt32(values[0]);
+        //            string firstName = values[1];
+        //            string lastName = values[2];
+        //            string stringDOB = values[3];
                    
-                    // convert DOB string to a DateTime object
-                    DateTime DOB = DateConvertor.StringToDateObject(stringDOB);
+        //            // convert DOB string to a DateTime object
+        //            DateTime DOB = DateConvertor.StringToDateObject(stringDOB);
 
-                    string stringStartDate = values[4];
-                    DateTime startDate = DateConvertor.StringToDateObject(stringStartDate);
+        //            string stringStartDate = values[4];
+        //            DateTime startDate = DateConvertor.StringToDateObject(stringStartDate);
 
-                    string homeTown = values[5];
-                    string department = values[6];
+        //            string homeTown = values[5];
+        //            string department = values[6];
 
-                    Employee newEmployee = new Employee(employeeId, firstName, lastName, DOB, startDate, homeTown, department);
-                    employeeList.Add(newEmployee);
+        //            Employee newEmployee = new Employee(employeeId, firstName, lastName, DOB, startDate, homeTown, department);
+        //            employeeList.Add(newEmployee);
 
-                }
-                Console.WriteLine("Employees added from csv file!");
-                //Console.ReadLine();
-            }
-            ShowMenu(employeeList);
-        }
+        //        }
+        //        Console.WriteLine("Employees added from csv file!");
+        //        //Console.ReadLine();
+        //    }
+        //    ShowMenu(employeeList);
+        //}
+
+
         /// <summary>
         /// Add new employee manually
         /// </summary>
@@ -322,39 +334,67 @@ namespace EmployeeProgram
             employeeList.Clear();
             // retrieve path of data from config file
             string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
-            using (var reader = new StreamReader(databasePath))
 
+            var line = File.ReadAllLines(databasePath);
+            foreach (var x in line)
             {
-                while (!reader.EndOfStream)
-                {
-                    var line = reader.ReadLine();
-                    if (string.IsNullOrEmpty(line))
-                     break;
-                    var values = line.Split(',');
+                if (string.IsNullOrEmpty(x))
+                             break;
+                    var values = x.Split(',');
 
 
-                    // assign each value from values array to corresponding field
-                    int employeeId = Convert.ToInt32(values[0]);
-                    string firstName = values[1];
-                    string lastName = values[2];
-                    string stringDOB = values[3];
 
-                    // convert DOB string to a DateTime object
-                    DateTime DOB = DateConvertor.StringToDateObject(stringDOB);
+                int employeeId = Convert.ToInt32(values[0]);
+                string firstName = values[1];
+                string lastName = values[2];
+                string stringDOB = values[3];
 
-                    string stringStartDate = values[4];
-                    DateTime startDate = DateConvertor.StringToDateObject(stringStartDate);
+                // convert DOB string to a DateTime object
+                DateTime DOB = DateConvertor.StringToDateObject(stringDOB);
 
-                    string homeTown = values[5];
-                    string department = values[6];
+                string stringStartDate = values[4];
+                DateTime startDate = DateConvertor.StringToDateObject(stringStartDate);
 
-                    Employee newEmployee = new Employee(employeeId, firstName, lastName, DOB, startDate, homeTown, department);
-                    employeeList.Add(newEmployee);
+                string homeTown = values[5];
+                string department = values[6];
 
-                }
-               // Console.WriteLine("Employees added from csv file!");
-                //Console.ReadLine();
+                Employee newEmployee = new Employee(employeeId, firstName, lastName, DOB, startDate, homeTown, department);
+                employeeList.Add(newEmployee);
+
             }
+
+            //using (var reader = new StreamReader(databasePath))
+
+            //{
+            //    while (!reader.EndOfStream)
+            //    {
+            //        var line = reader.ReadLine();
+            //        if (string.IsNullOrEmpty(line))
+            //         break;
+            //        var values = line.Split(',');
+
+
+            //        // assign each value from values array to corresponding field
+            //        int employeeId = Convert.ToInt32(values[0]);
+            //        string firstName = values[1];
+            //        string lastName = values[2];
+            //        string stringDOB = values[3];
+
+            //        // convert DOB string to a DateTime object
+            //        DateTime DOB = DateConvertor.StringToDateObject(stringDOB);
+
+            //        string stringStartDate = values[4];
+            //        DateTime startDate = DateConvertor.StringToDateObject(stringStartDate);
+
+            //        string homeTown = values[5];
+            //        string department = values[6];
+
+            //        Employee newEmployee = new Employee(employeeId, firstName, lastName, DOB, startDate, homeTown, department);
+            //        employeeList.Add(newEmployee);
+
+            //    }
+               
+            //}
             return employeeList;
             //ShowMenu(employeeList);
         }
@@ -367,8 +407,8 @@ namespace EmployeeProgram
             foreach (var employee in employeeList)
             {
                 string stringDOB = DateConvertor.DateObjectToString(employee.DOB);
-                string stringStartDate = DateConvertor.DateObjectToString(employee.startDate);
-                string employeeDetails = $"{employee.employeeId},{employee.firstName},{employee.lastName},{stringDOB},{stringStartDate},{employee.homeTown},{employee.department}\n";
+                string stringStartDate = DateConvertor.DateObjectToString(employee.StartDate);
+                string employeeDetails = $"{employee.EmployeeId},{employee.FirstName},{employee.LastName},{stringDOB},{stringStartDate},{employee.HomeTown},{employee.Department}\n";
                 sb.Append(employeeDetails);
                 
             }

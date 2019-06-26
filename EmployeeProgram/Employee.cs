@@ -8,25 +8,39 @@ namespace EmployeeProgram
 {
     public class Employee
     {
-        public int employeeId { get; set; }
-        public string  firstName { get; set; }
-        public string lastName { get; set; }
+        public int EmployeeId { get; set; }
+        public string  FirstName { get; set; }
+        public string LastName { get; set; }
         public DateTime DOB { get; set; }
-        public DateTime startDate { get; set; }
-        public string homeTown { get; set; }
-        public string department { get; set; }
-        public int age { get; set; }
+        public DateTime StartDate { get; set; }
+        public string HomeTown { get; set; }
+        public string Department { get; set; }
+       // public int Age { get; set; }
+        public int Age {
+            get {
+
+                int age = DateTime.Now.Year - DOB.Year;
+
+                if (DateTime.Now.DayOfYear < DOB.DayOfYear)
+                {
+                    age = age - 1;
+                }
+
+                return age;
+            }
+        }
+
 
 
         public Employee(int employeeId, string firstName, string lastName, DateTime DOB, DateTime startDate, string homeTown, string department)
         {
-            this.employeeId = employeeId;
-            this.firstName = firstName;
-            this.lastName = lastName;
+            this.EmployeeId = employeeId;
+            this.FirstName = firstName;
+            this.LastName = lastName;
             this.DOB = DOB;
-            this.startDate = startDate;  
-            this.homeTown = homeTown;
-            this.department = department;
+            this.StartDate = startDate;  
+            this.HomeTown = homeTown;
+            this.Department = department;
         
     }
         /// <summary>
@@ -34,7 +48,7 @@ namespace EmployeeProgram
         /// </summary>
         public void ShowDetails()
         {
-            Console.WriteLine($"Name: {firstName} {lastName} DOB: {DOB} Start Date: {startDate} Home Town: {homeTown} Dept: {department}");
+            Console.WriteLine($"Name: {FirstName} {LastName} DOB: {DOB} Start Date: {StartDate} Home Town: {HomeTown} Dept: {Department}");
         }
 
         
