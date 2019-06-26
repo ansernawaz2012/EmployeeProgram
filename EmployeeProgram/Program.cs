@@ -151,13 +151,46 @@ namespace EmployeeProgram
         /// Remove an employee from current list
         /// </summary>
         /// <param name="employeeList"></param>
-        private static void RemoveEmployee(List<Employee> employeeList)
+        private static List<Employee> RemoveEmployee(List<Employee> employeeList)
         {
-            throw new NotImplementedException();
+            Console.Write("Enter the ID of the employee to be removed:");
+            int id = Convert.ToInt32(Console.ReadLine());
+
+
+            var removeItem = employeeList.FirstOrDefault(e => e.employeeId == id);
+            if(removeItem != null)
+            {
+                Console.WriteLine($"{removeItem.firstName} with ID {removeItem.employeeId} will be removed!"); 
+                employeeList.Remove(removeItem);
+                WriteToCsv(employeeList);
+                
+            }
+            else
+            {
+                Console.WriteLine("Record not found");
+            }
+
+            return employeeList;
+
+
+            //var result = employeeList.Where(e => e.employeeId == id)
+            //             .Select(e => e);
+
+            //if (result.Count() == 0)
+            //{
+            //    Console.WriteLine("Record not found!");
+            //}
+            //else
+            //{
+            //    for
+
+            //    WriteToCsv(employeeList);
+            //    return employeeList;
+            //}
         }
 
         //edit employee method
-        private static void EditEmployee(List<Employee> employeeList)
+        private static List<Employee> EditEmployee(List<Employee> employeeList)
         {
             throw new NotImplementedException();
         }
@@ -167,7 +200,7 @@ namespace EmployeeProgram
         /// Display list of employees 
         /// </summary>
         /// <param name="employeeList"></param>
-        private static void ShowEmployees(List<Employee> employeeList)
+        private static List<Employee> ShowEmployees(List<Employee> employeeList)
         {
             //Re-load data from updated csv file
             employeeList = LoadDataViaCsv(employeeList);
@@ -178,7 +211,7 @@ namespace EmployeeProgram
 
             // List employees using Linq
             var listOfEmployees = employeeList
-                .OrderByDescending(e =>e.startDate)
+                .OrderBy(e =>e.employeeId)
                 .Select(e => e);
 
 
@@ -195,8 +228,7 @@ namespace EmployeeProgram
             }
 
 
-            // Console.ReadLine();
-            // showMenu(employeeList);
+            return employeeList;
 
         }
 
@@ -268,15 +300,17 @@ namespace EmployeeProgram
             Employee newEmployee = new Employee(employeeId, firstName, lastName, DOB, startDate, homeTown, department);
             employeeList.Add(newEmployee);
 
-            string newEmployeeDetails = $"{employeeId},{firstName},{lastName},{stringDOB},{stringStartDate},{homeTown},{department}\n";
+            //string newEmployeeDetails = $"{employeeId},{firstName},{lastName},{stringDOB},{stringStartDate},{homeTown},{department}\n";
 
-            string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
-            StreamWriter sw = new StreamWriter(databasePath, false);
-            sw.WriteLine(newEmployeeDetails);
-            sw.Close(); 
+            //string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
+            //StreamWriter sw = new StreamWriter(databasePath, false);
+            //sw.WriteLine(newEmployeeDetails);
+            //sw.Close(); 
+
+            WriteToCsv(employeeList);
             
             Console.WriteLine("New employee added");
-            Console.ReadLine();
+            Console.WriteLine("------------------");
 
             return employeeList;
 
@@ -323,6 +357,24 @@ namespace EmployeeProgram
             }
             return employeeList;
             //ShowMenu(employeeList);
+        }
+
+        private static void WriteToCsv(List<Employee> employeeList)
+        {
+            string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
+            StreamWriter sw = new StreamWriter(databasePath, false);
+            StringBuilder sb = new StringBuilder();
+            foreach (var employee in employeeList)
+            {
+                string stringDOB = DateConvertor.DateObjectToString(employee.DOB);
+                string stringStartDate = DateConvertor.DateObjectToString(employee.startDate);
+                string employeeDetails = $"{employee.employeeId},{employee.firstName},{employee.lastName},{stringDOB},{stringStartDate},{employee.homeTown},{employee.department}\n";
+                sb.Append(employeeDetails);
+                
+            }
+            sw.WriteLine(sb);
+            sw.Close();
+            return;
         }
     }
 }

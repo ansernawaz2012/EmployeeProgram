@@ -16,6 +16,14 @@ namespace EmployeeProgram
             return dateObject.Date;
         }
 
+        public static string DateObjectToString(DateTime DOB)
+        {
+            string stringStartDate = DOB.ToShortDateString();
+
+            return stringStartDate;
+
+        }
+
 
         /// <summary>
         /// Method to calculate age from date of birth
