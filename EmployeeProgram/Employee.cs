@@ -8,6 +8,7 @@ namespace EmployeeProgram
 {
     public class Employee
     {
+        public int employeeId { get; set; }
         public string  firstName { get; set; }
         public string lastName { get; set; }
         public DateTime DOB { get; set; }
@@ -17,8 +18,9 @@ namespace EmployeeProgram
         public int age { get; set; }
 
 
-        public Employee(string firstName, string lastName, DateTime DOB, DateTime startDate, string homeTown, string department)
+        public Employee(int employeeId, string firstName, string lastName, DateTime DOB, DateTime startDate, string homeTown, string department)
         {
+            this.employeeId = employeeId;
             this.firstName = firstName;
             this.lastName = lastName;
             this.DOB = DOB;
