@@ -140,14 +140,23 @@ namespace EmployeeProgram
         {
             foreach (var employee in employeeList)
             {
-                var currentDayOfYear = DateTime.Now.DayOfYear;
-                var empStartDate = employee.StartDate.DayOfYear;
-                if (empStartDate - currentDayOfYear <= 30 && empStartDate > currentDayOfYear )
+                if(employee.StartDate.CompareStartDate())
                 {
                     Console.WriteLine($"{employee.FirstName} with a start date of {employee.StartDate} has an anniversary within 30 days");
-                }
+                };
+
+
+                //var currentDayOfYear = DateTime.Now.DayOfYear;
+                //var empStartDate = employee.StartDate.DayOfYear;
+                //if (empStartDate - currentDayOfYear <= 30 && empStartDate > currentDayOfYear )
+                //{
+                //    Console.WriteLine($"{employee.FirstName} with a start date of {employee.StartDate} has an anniversary within 30 days");
+                //}
             }
         }
+        
+        
+
 
         /// <summary>
         /// Remove an employee from current list

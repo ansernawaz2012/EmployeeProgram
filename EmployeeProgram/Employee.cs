@@ -15,7 +15,7 @@ namespace EmployeeProgram
         public DateTime StartDate { get; set; }
         public string HomeTown { get; set; }
         public string Department { get; set; }
-       // public int Age { get; set; }
+       
         public int Age {
             get {
 

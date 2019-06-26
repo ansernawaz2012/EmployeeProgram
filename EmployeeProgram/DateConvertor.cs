@@ -23,25 +23,41 @@ namespace EmployeeProgram
             return stringStartDate;
 
         }
-
+        /// <summary>
+        /// Extension method to indicate whether an employee has an 
+        /// anniversary within the next 30 days
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <returns></returns>
+        public static bool CompareStartDate(this DateTime startDate)
+        {
+            bool hasAnniversary = false;
+            var currentDayOfYear = DateTime.Now.DayOfYear;
+            var empStartDate = startDate.DayOfYear;
+            if (empStartDate - currentDayOfYear <= 30 && empStartDate > currentDayOfYear)
+            {
+                hasAnniversary = true;
+            }
+            return hasAnniversary;
+        }
 
         /// <summary>
         /// Method to calculate age from date of birth
         /// </summary>
         /// <param name="dob"></param>
         /// <returns></returns>
-        public static int GetEmployeeAge(DateTime dob)
-        {
-            int age;
-            age = DateTime.Now.Year - dob.Year;
+        //public static int GetEmployeeAge(DateTime dob)
+        //{
+        //    int age;
+        //    age = DateTime.Now.Year - dob.Year;
 
-            if (DateTime.Now.DayOfYear < dob.DayOfYear)
-            {
-                age = age - 1;
-            }
+        //    if (DateTime.Now.DayOfYear < dob.DayOfYear)
+        //    {
+        //        age = age - 1;
+        //    }
 
-            return age;
-        }
+        //    return age;
+        //}
 
     }
 }
