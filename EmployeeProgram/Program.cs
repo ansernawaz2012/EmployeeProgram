@@ -10,8 +10,12 @@ namespace EmployeeProgram
 {
     class Program
     {
+
+        static IEmployeeRepository RepoInterface = new EmployeeRepository();
+
         static void Main(string[] args)
         {
+
             //Initialize empty list containing employee objects
             List<Employee> employeeList = new List<Employee>();
             LoadDataViaCsv(employeeList);
@@ -52,25 +56,25 @@ namespace EmployeeProgram
             switch (userOption)
             {
                 case 1:
-                    ShowEmployees(employeeList);
+                    RepoInterface.ShowEmployees(employeeList);
                     break;
                 case 2:
-                    AddEmployeeManually(employeeList);
+                    RepoInterface.AddEmployeeManually(employeeList);
                     break;
                 case 3:
-                    EditEmployee(employeeList);
+                    RepoInterface.EditEmployee(employeeList);
                     break;
                 case 4:
-                    RemoveEmployee(employeeList);
+                    RepoInterface.RemoveEmployee(employeeList);
                     break;
                 case 5:
-                    ShowEmployeeWithAnniversary(employeeList);
+                    RepoInterface.ShowEmployeeWithAnniversary(employeeList);
                     break;
                 case 6:
-                    AverageEmployeeAgeInDept(employeeList);
+                    RepoInterface.AverageEmployeeAgeInDept(employeeList);
                     break;
                 case 7:
-                    EmployeesPerTown(employeeList);
+                    RepoInterface.EmployeesPerTown(employeeList);
                     break;
                 //case 8:
                 //    AddEmployeeViaCsv(employeeList);
