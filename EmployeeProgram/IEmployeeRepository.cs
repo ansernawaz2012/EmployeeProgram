@@ -8,13 +8,11 @@ namespace EmployeeProgram
 {
    public interface IEmployeeRepository
     {
-
+    
         List<Employee> ShowEmployees(List<Employee> employeeList);
         List<Employee> AddEmployeeManually(List<Employee> employeeList);
         List<Employee> EditEmployee(List<Employee> employeeList);
         List<Employee> RemoveEmployee(List<Employee> employeeList);
       
-        void WriteToCsv(List<Employee> employeeList);
-        List<Employee> LoadDataViaCsv(List<Employee> employeeList);
     }
 }

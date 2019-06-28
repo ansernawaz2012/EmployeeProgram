@@ -211,38 +211,7 @@ namespace EmployeeProgram
 
             }
 
-            //using (var reader = new StreamReader(databasePath))
-
-            //{
-            //    while (!reader.EndOfStream)
-            //    {
-            //        var line = reader.ReadLine();
-            //        if (string.IsNullOrEmpty(line))
-            //         break;
-            //        var values = line.Split(',');
-
-
-            //        // assign each value from values array to corresponding field
-            //        int employeeId = Convert.ToInt32(values[0]);
-            //        string firstName = values[1];
-            //        string lastName = values[2];
-            //        string stringDOB = values[3];
-
-            //        // convert DOB string to a DateTime object
-            //        DateTime DOB = DateConvertor.StringToDateObject(stringDOB);
-
-            //        string stringStartDate = values[4];
-            //        DateTime startDate = DateConvertor.StringToDateObject(stringStartDate);
-
-            //        string homeTown = values[5];
-            //        string department = values[6];
-
-            //        Employee newEmployee = new Employee(employeeId, firstName, lastName, DOB, startDate, homeTown, department);
-            //        employeeList.Add(newEmployee);
-
-            //    }
-
-            //}
+            
             return employeeList;
             //ShowMenu(employeeList);
         }

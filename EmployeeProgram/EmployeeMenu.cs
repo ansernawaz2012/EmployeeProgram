@@ -3,20 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Configuration;
+
+
 
 namespace EmployeeProgram
 {
-    public class Controller
+    public class EmployeeMenu
     {
         private static  IEmployeeRepository _repository;
 
-        public Controller(IEmployeeRepository repository)
+        public EmployeeMenu(IEmployeeRepository repository)
         {
             _repository = repository;
 
             //Initialize empty list containing employee objects
             List<Employee> employeeList = new List<Employee>();
-            repository.LoadDataViaCsv(employeeList);
+            LoadDataViaCsv(employeeList);
             Console.WriteLine("Welcome to the Employee program");
 
             ShowMenu(employeeList);
@@ -149,5 +153,65 @@ namespace EmployeeProgram
             }
 
         }
+
+        public void WriteToCsv(List<Employee> employeeList)
+        {
+            string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
+            StreamWriter sw = new StreamWriter(databasePath, false);
+            StringBuilder sb = new StringBuilder();
+            foreach (var employee in employeeList)
+            {
+                string stringDOB = DateConvertor.DateObjectToString(employee.DOB);
+                string stringStartDate = DateConvertor.DateObjectToString(employee.StartDate);
+                string employeeDetails = $"{employee.EmployeeId},{employee.FirstName},{employee.LastName},{stringDOB},{stringStartDate},{employee.HomeTown},{employee.Department}\n";
+                sb.Append(employeeDetails);
+
+            }
+            sw.WriteLine(sb);
+            sw.Close();
+            return;
+        }
+
+        public List<Employee> LoadDataViaCsv(List<Employee> employeeList)
+        {
+            //Clear list and load content from csv file
+            employeeList.Clear();
+            // retrieve path of data from config file
+            string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
+
+            var line = File.ReadAllLines(databasePath);
+            foreach (var x in line)
+            {
+                if (string.IsNullOrEmpty(x))
+                    break;
+                var values = x.Split(',');
+
+
+
+                int employeeId = Convert.ToInt32(values[0]);
+                string firstName = values[1];
+                string lastName = values[2];
+                string stringDOB = values[3];
+
+                // convert DOB string to a DateTime object
+                DateTime DOB = DateConvertor.StringToDateObject(stringDOB);
+
+                string stringStartDate = values[4];
+                DateTime startDate = DateConvertor.StringToDateObject(stringStartDate);
+
+                string homeTown = values[5];
+                string department = values[6];
+
+                Employee newEmployee = new Employee(employeeId, firstName, lastName, DOB, startDate, homeTown, department);
+                employeeList.Add(newEmployee);
+
+            }
+
+
+            return employeeList;
+            //ShowMenu(employeeList);
+        }
     }
 }
+    
+

@@ -8,7 +8,7 @@ using System.Configuration;
 
 namespace EmployeeProgram
 {
-    class StartUp
+    class Program
     {
 
        // static readonly IEmployeeRepository repository = new EmployeeRepository();
@@ -18,7 +18,7 @@ namespace EmployeeProgram
              IEmployeeRepository repository = new EmployeeRepository();
 
 
-            Controller EmployeeProgram = new Controller(repository);
+            EmployeeMenu employeeMenu = new EmployeeMenu(repository);
 
             
             
