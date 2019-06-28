@@ -3,26 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
-using System.Configuration;
 
 namespace EmployeeProgram
 {
-    class Program
+    public class Controller
     {
+        private static  IEmployeeRepository _repository;
 
-        static IEmployeeRepository RepoInterface = new EmployeeRepository();
-
-        static void Main(string[] args)
+        public Controller(IEmployeeRepository repository)
         {
+            _repository = repository;
 
             //Initialize empty list containing employee objects
             List<Employee> employeeList = new List<Employee>();
-            RepoInterface.LoadDataViaCsv(employeeList);
+            repository.LoadDataViaCsv(employeeList);
             Console.WriteLine("Welcome to the Employee program");
 
             ShowMenu(employeeList);
-            
         }
 
         private static void ShowMenu(List<Employee> employeeList)
@@ -39,14 +36,14 @@ namespace EmployeeProgram
             Console.WriteLine("5 - List employees with a work anniversary within the next month");
             Console.WriteLine("6 - List average age of employees in each department");
             Console.WriteLine("7 - List number of employees in each town");
-         
+
 
             Console.WriteLine("0 - Exit");
 
             //Get input from user
             string input = Console.ReadLine();
             int userOption;
-            
+
             //Force user to enter number
             while (!Int32.TryParse(input, out userOption))
             {
@@ -59,16 +56,16 @@ namespace EmployeeProgram
             switch (userOption)
             {
                 case 1:
-                    RepoInterface.ShowEmployees(employeeList);
+                    _repository.ShowEmployees(employeeList);
                     break;
                 case 2:
-                    RepoInterface.AddEmployeeManually(employeeList);
+                    _repository.AddEmployeeManually(employeeList);
                     break;
                 case 3:
-                    RepoInterface.EditEmployee(employeeList);
+                    _repository.EditEmployee(employeeList);
                     break;
                 case 4:
-                    RepoInterface.RemoveEmployee(employeeList);
+                    _repository.RemoveEmployee(employeeList);
                     break;
                 case 5:
                     ShowEmployeeWithAnniversary(employeeList);
@@ -87,9 +84,9 @@ namespace EmployeeProgram
                     break;
             }
 
-            
+
             ShowMenu(employeeList);
-          
+
         }
 
         // OPTION 5
@@ -127,7 +124,7 @@ namespace EmployeeProgram
 
             foreach (var x in results)
             {
-                Console.WriteLine($"The average age for {x.Department} is {Math.Round((float)x.TotalAge / (float)x.NumberOfEmployees,1, MidpointRounding.AwayFromZero)}");
+                Console.WriteLine($"The average age for {x.Department} is {Math.Round((float)x.TotalAge / (float)x.NumberOfEmployees, 1, MidpointRounding.AwayFromZero)}");
             }
 
         }
@@ -152,6 +149,5 @@ namespace EmployeeProgram
             }
 
         }
-
     }
 }
