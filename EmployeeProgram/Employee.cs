@@ -43,13 +43,7 @@ namespace EmployeeProgram
             this.Department = department;
         
     }
-        /// <summary>
-        /// Method to display employee details
-        /// </summary>
-        public void ShowDetails()
-        {
-            Console.WriteLine($"Name: {FirstName} {LastName} DOB: {DOB} Start Date: {StartDate} Home Town: {HomeTown} Dept: {Department}");
-        }
+        
 
         
     }

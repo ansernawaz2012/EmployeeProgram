@@ -156,66 +156,7 @@ namespace EmployeeProgram
 
         }
 
-        // OPTION 5
-        /// <summary>
-        /// List of employees that have a work anniversary within 30 days 
-        /// </summary>
-        /// <param name="employeeList"></param>
-        public  void ShowEmployeeWithAnniversary(List<Employee> employeeList)
-        {
-            foreach (var employee in employeeList)
-            {
-                if (employee.StartDate.CompareStartDate())
-                {
-                    Console.WriteLine($"{employee.FirstName} with a start date of {employee.StartDate} has an anniversary within 30 days");
-                };
-
-            }
-        }
-
-
-        // OPTION 6
-        /// <summary>
-        /// Method to calculate average employee age for each department
-        /// </summary>
-        /// <param name="employeeList"></param>        
-        public  void AverageEmployeeAgeInDept(List<Employee> employeeList)
-        {
-            
-            var results = employeeList
-                          .GroupBy(e => e.Department)
-                          .Select(e => new { Department = e.Key, NumberOfEmployees = e.Count(), TotalAge = e.Sum(x => x.Age) });
-
-            Console.WriteLine("Average age of employees per department.");
-
-
-            foreach (var x in results)
-            {
-                Console.WriteLine($"The average age for {x.Department} is {x.TotalAge / x.NumberOfEmployees}");
-            }
-
-        }
-
-
-        // OPTION 7
-        /// <summary>
-        ///  Method to show number of employees for each town
-        /// </summary>
-        /// <param name="employeeList"></param>
-        public  void EmployeesPerTown(List<Employee> employeeList)
-        {
-            var results = employeeList
-                          .GroupBy(e => e.HomeTown)
-                          .Select(e => new { Hometown = e.Key, NumberOfEmployees = e.Count() });
-
-            Console.WriteLine("Number of employees per town.");
-
-            foreach (var x in results)
-            {
-                Console.WriteLine($"The number of employees from {x.Hometown} is {x.NumberOfEmployees}");
-            }
-
-        }
+                
 
         public  void WriteToCsv(List<Employee> employeeList)
         {

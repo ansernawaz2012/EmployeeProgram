@@ -127,7 +127,7 @@ namespace EmployeeProgram
 
             foreach (var x in results)
             {
-                Console.WriteLine($"The average age for {x.Department} is {x.TotalAge / x.NumberOfEmployees}");
+                Console.WriteLine($"The average age for {x.Department} is {Math.Round((float)x.TotalAge / (float)x.NumberOfEmployees,1, MidpointRounding.AwayFromZero)}");
             }
 
         }
