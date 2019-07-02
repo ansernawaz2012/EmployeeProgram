@@ -215,5 +215,13 @@ namespace EmployeeProgram
             return employeeList;
             //ShowMenu(employeeList);
         }
+
+        public List<Employee> GetData(List<Employee> employeeList)
+        {
+            //Load data from updated csv file
+            employeeList = LoadDataViaCsv(employeeList);
+
+            return employeeList;
+        }
     }
 }
