@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Configuration;
+using RestSharp;
+using Newtonsoft.Json;
 
 
 
@@ -20,12 +22,31 @@ namespace EmployeeProgram
 
             //Initialize empty list containing employee objects
             List<Employee> employeeList = new List<Employee>();
-            _repository.GetData(employeeList);
+            //_repository.GetData(employeeList);
+            employeeList = GetEmployeeListFromAPI();
             Console.WriteLine("Welcome to the Employee program");
 
             ShowMenu(employeeList);
         }
 
+        /// <summary>
+        /// Method to retrieve list of employees from Web API
+        /// </summary>
+        /// <returns></returns>
+        private List<Employee> GetEmployeeListFromAPI()
+        {
+            var client = new RestClient("http://localhost:55026");
+            var request = new RestRequest("api/employee", Method.GET);
+            // request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+
+            var queryResult = client.Execute<List<Employee>>(request);
+
+            //var queryResult = client.Execute(request);
+            //List<Employee> results = JsonConvert.DeserializeObject<Employee>(queryResult.Content);
+
+            //Console.WriteLine(queryResult.Content);
+            return queryResult.Data;
+        }
         private static void ShowMenu(List<Employee> employeeList)
         {
             Console.WriteLine("Press any key to continue");

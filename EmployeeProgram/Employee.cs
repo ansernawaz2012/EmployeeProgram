@@ -5,48 +5,53 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EmployeeProgram
-{
+
+{    
+
     public class Employee
     {
         public int EmployeeId { get; set; }
-        public string  FirstName { get; set; }
+        public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DOB { get; set; }
         public DateTime StartDate { get; set; }
         public string HomeTown { get; set; }
         public string Department { get; set; }
-       
-        public int Age {
-            get {
 
-                int age = DateTime.Now.Year - DOB.Year;
+        //public int Age {
+        //    get {
 
-                if (DateTime.Now.DayOfYear < DOB.DayOfYear)
-                {
-                    age = age - 1;
-                }
+        //        int age = DateTime.Now.Year - DOB.Year;
 
-                return age;
-            }
+        //        if (DateTime.Now.DayOfYear < DOB.DayOfYear)
+        //        {
+        //            age = age - 1;
+        //        }
+
+        //        return age;
+        //    }
+        //}
+        public int Age { get; set; }
+
+        public Employee()
+        {
+
         }
-
-
-
         public Employee(int employeeId, string firstName, string lastName, DateTime DOB, DateTime startDate, string homeTown, string department)
         {
             this.EmployeeId = employeeId;
             this.FirstName = firstName;
             this.LastName = lastName;
             this.DOB = DOB;
-            this.StartDate = startDate;  
+            this.StartDate = startDate;
             this.HomeTown = homeTown;
             this.Department = department;
-        
-    }
-        
 
-        
+        }
+
+
+
     }
 
-    
+
 }

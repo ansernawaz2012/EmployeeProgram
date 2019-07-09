@@ -18,7 +18,7 @@ namespace EmployeeProgram
         public List<Employee> ShowEmployees(List<Employee> employeeList)
         {
             //Re-load data from updated csv file
-            employeeList = LoadDataViaCsv(employeeList);
+           // employeeList = LoadDataViaCsv(employeeList);
 
             Console.WriteLine("List of employees:");
 
