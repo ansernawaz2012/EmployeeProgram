@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -10,6 +11,10 @@ namespace EmployeeProgram
 {
     public class EmployeeRepository : IEmployeeRepository
     {
+
+        static RestClient client = new RestClient("http://localhost:55026");
+
+
         // OPTION 1
         /// <summary>
         /// Display list of employees taken from data source
@@ -18,7 +23,8 @@ namespace EmployeeProgram
         public List<Employee> ShowEmployees(List<Employee> employeeList)
         {
             //Re-load data from updated csv file
-           // employeeList = LoadDataViaCsv(employeeList);
+            // employeeList = LoadDataViaCsv(employeeList);
+            employeeList = GetData(employeeList);
 
             Console.WriteLine("List of employees:");
 
@@ -133,7 +139,31 @@ namespace EmployeeProgram
         /// Remove an employee from current list using employeeID
         /// </summary>
         /// <param name="employeeList"></param>
-        public  List<Employee> RemoveEmployee(List<Employee> employeeList)
+        //public  List<Employee> RemoveEmployee(List<Employee> employeeList)
+        //{
+        //    Console.Write("Enter the ID of the employee to be removed:");
+        //    int id = Convert.ToInt32(Console.ReadLine());
+
+
+        //    var removeItem = employeeList.FirstOrDefault(e => e.EmployeeId == id);
+        //    if (removeItem != null)
+        //    {
+        //        Console.WriteLine($"{removeItem.FirstName} with ID {removeItem.EmployeeId} will be removed!");
+        //        employeeList.Remove(removeItem);
+        //        WriteToCsv(employeeList);
+
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Record not found");
+        //    }
+
+        //    return employeeList;
+
+        //}
+
+
+        public List<Employee> RemoveEmployee(List<Employee> employeeList)
         {
             Console.Write("Enter the ID of the employee to be removed:");
             int id = Convert.ToInt32(Console.ReadLine());
@@ -143,8 +173,12 @@ namespace EmployeeProgram
             if (removeItem != null)
             {
                 Console.WriteLine($"{removeItem.FirstName} with ID {removeItem.EmployeeId} will be removed!");
+
+                var request = new RestRequest("api/employee/" + removeItem.EmployeeId, Method.DELETE);
+               // request.AddParameter("id", removeItem.EmployeeId);
+                client.Execute(request);
                 employeeList.Remove(removeItem);
-                WriteToCsv(employeeList);
+                //WriteToCsv(employeeList);
 
             }
             else
@@ -156,7 +190,7 @@ namespace EmployeeProgram
 
         }
 
-        
+
         public  void WriteToCsv(List<Employee> employeeList)
         {
             string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
@@ -218,9 +252,16 @@ namespace EmployeeProgram
         public List<Employee> GetData(List<Employee> employeeList)
         {
             //Load data from updated csv file
-            employeeList = LoadDataViaCsv(employeeList);
+            //employeeList = LoadDataViaCsv(employeeList);
+            
+            var request = new RestRequest("api/employee", Method.GET);
 
-            return employeeList;
+            var queryResult = client.Execute<List<Employee>>(request);
+
+            
+            return queryResult.Data;
+
+            
         }
     }
 }
