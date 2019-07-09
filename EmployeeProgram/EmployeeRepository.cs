@@ -156,8 +156,7 @@ namespace EmployeeProgram
 
         }
 
-                
-
+        
         public  void WriteToCsv(List<Employee> employeeList)
         {
             string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];

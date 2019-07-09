@@ -15,6 +15,7 @@ namespace EmployeeProgram
     public class EmployeeMenu
     {
         private static  IEmployeeRepository _repository;
+        static RestClient client = new RestClient("http://localhost:55026");
 
         public EmployeeMenu(IEmployeeRepository repository)
         {
@@ -23,6 +24,7 @@ namespace EmployeeProgram
             //Initialize empty list containing employee objects
             List<Employee> employeeList = new List<Employee>();
             //_repository.GetData(employeeList);
+
             employeeList = GetEmployeeListFromAPI();
             Console.WriteLine("Welcome to the Employee program");
 
@@ -35,7 +37,7 @@ namespace EmployeeProgram
         /// <returns></returns>
         private List<Employee> GetEmployeeListFromAPI()
         {
-            var client = new RestClient("http://localhost:55026");
+           // var client = new RestClient("http://localhost:55026");
             var request = new RestRequest("api/employee", Method.GET);
             // request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
 
@@ -93,13 +95,13 @@ namespace EmployeeProgram
                     _repository.RemoveEmployee(employeeList);
                     break;
                 case 5:
-                    ShowEmployeeWithAnniversary(employeeList);
+                    APIShowEmployeeWithAnniversary(employeeList);
                     break;
                 case 6:
-                    AverageEmployeeAgeInDept(employeeList);
+                    APIAverageEmployeeAgeInDept(employeeList);
                     break;
                 case 7:
-                    EmployeesPerTown(employeeList);
+                    APIEmployeesPerTown(employeeList);
                     break;
                 case 0:
                     Environment.Exit(0);
@@ -131,6 +133,18 @@ namespace EmployeeProgram
             }
         }
 
+        private static void APIShowEmployeeWithAnniversary(List<Employee> employeeList)
+        {
+            var request = new RestRequest("api/employee/ShowEmployeeWithAnniversary", Method.GET);
+
+
+            var queryResult = client.Execute<List<string>>(request);
+
+            foreach (var x in queryResult.Data)
+            {
+                Console.WriteLine(x);
+            }
+        }
 
         // OPTION 6
         /// <summary>
@@ -154,6 +168,19 @@ namespace EmployeeProgram
 
         }
 
+        private static void APIAverageEmployeeAgeInDept(List<Employee> employeeList)
+        {
+            var request = new RestRequest("api/employee/GetAverageEmployeeAgeInDept", Method.GET);
+
+
+            var queryResult = client.Execute<List<string>>(request);
+
+            foreach (var x in queryResult.Data)
+            {
+                Console.WriteLine(x);
+            }
+        }
+
 
         // OPTION 7
         /// <summary>
@@ -175,63 +202,31 @@ namespace EmployeeProgram
 
         }
 
-        //public void WriteToCsv(List<Employee> employeeList)
-        //{
-        //    string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
-        //    StreamWriter sw = new StreamWriter(databasePath, false);
-        //    StringBuilder sb = new StringBuilder();
-        //    foreach (var employee in employeeList)
-        //    {
-        //        string stringDOB = DateConvertor.DateObjectToString(employee.DOB);
-        //        string stringStartDate = DateConvertor.DateObjectToString(employee.StartDate);
-        //        string employeeDetails = $"{employee.EmployeeId},{employee.FirstName},{employee.LastName},{stringDOB},{stringStartDate},{employee.HomeTown},{employee.Department}\n";
-        //        sb.Append(employeeDetails);
+        private static void APIEmployeesPerTown(List<Employee> employeeList)
+        {
+            
+            var request = new RestRequest("api/employee/GetEmployeesPerTown", Method.GET);
+            
 
-        //    }
-        //    sw.WriteLine(sb);
-        //    sw.Close();
-        //    return;
-        //}
+            var queryResult = client.Execute<List<string>>(request);
 
-        //public List<Employee> LoadDataViaCsv(List<Employee> employeeList)
-        //{
-        //    //Clear list and load content from csv file
-        //    employeeList.Clear();
-        //    // retrieve path of data from config file
-        //    string databasePath = ConfigurationManager.AppSettings["CsvDatabasePath"];
+            foreach (var x in queryResult.Data)
+            {
+                Console.WriteLine(x);
+            }
+            //var queryResult = client.Execute(request);
+            //List<Employee> results = JsonConvert.DeserializeObject<Employee>(queryResult.Content);
 
-        //    var line = File.ReadAllLines(databasePath);
-        //    foreach (var x in line)
-        //    {
-        //        if (string.IsNullOrEmpty(x))
-        //            break;
-        //        var values = x.Split(',');
+            //Console.WriteLine(queryResult.Content);
+            //return queryResult.Data;
 
+            //foreach (var x in results)
+            //{
+            //    Console.WriteLine($"The number of employees from {x.Hometown} is {x.NumberOfEmployees}");
+            //}
 
+        }
 
-        //        int employeeId = Convert.ToInt32(values[0]);
-        //        string firstName = values[1];
-        //        string lastName = values[2];
-        //        string stringDOB = values[3];
-
-        //        // convert DOB string to a DateTime object
-        //        DateTime DOB = DateConvertor.StringToDateObject(stringDOB);
-
-        //        string stringStartDate = values[4];
-        //        DateTime startDate = DateConvertor.StringToDateObject(stringStartDate);
-
-        //        string homeTown = values[5];
-        //        string department = values[6];
-
-        //        Employee newEmployee = new Employee(employeeId, firstName, lastName, DOB, startDate, homeTown, department);
-        //        employeeList.Add(newEmployee);
-
-        //    }
-
-
-        //    return employeeList;
-        //    //ShowMenu(employeeList);
-        //}
     }
 }
     
