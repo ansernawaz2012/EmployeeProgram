@@ -107,7 +107,34 @@ namespace EmployeeProgram
         /// </summary>
         /// <param name="employeeList"></param>
         /// <returns></returns>
-        public  List<Employee> EditEmployee(List<Employee> employeeList)
+        //public  List<Employee> EditEmployee(List<Employee> employeeList)
+        //{
+
+        //    Console.Write("Enter the ID of the employee you wish to edit:");
+        //    int id = Convert.ToInt32(Console.ReadLine());
+
+
+        //    var editItem = employeeList.FirstOrDefault(e => e.EmployeeId == id);
+        //    if (editItem != null)
+        //    {
+        //        Console.WriteLine($"Record found - Name: {editItem.FirstName} {editItem.LastName} ID: {editItem.EmployeeId} DOB: {editItem.DOB} StartDate: {editItem.StartDate} ");
+        //        Console.WriteLine($"Enter new date of birth for {editItem.FirstName}");
+        //        var stringDOB = Console.ReadLine();
+        //        var DOB = DateConvertor.StringToDateObject(stringDOB);
+
+        //        editItem.DOB = DOB;
+        //        WriteToCsv(employeeList);
+        //        Console.WriteLine("Record updated!");
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Record not found");
+        //    }
+
+        //    return employeeList;
+        //}
+
+        public List<Employee> EditEmployee(List<Employee> employeeList)
         {
 
             Console.Write("Enter the ID of the employee you wish to edit:");
@@ -123,7 +150,16 @@ namespace EmployeeProgram
                 var DOB = DateConvertor.StringToDateObject(stringDOB);
 
                 editItem.DOB = DOB;
-                WriteToCsv(employeeList);
+
+                var request = new RestRequest("api/employee/" + editItem.EmployeeId, Method.PUT);
+                // request.AddParameter("id", removeItem.EmployeeId);
+               // request.AddParameter("application/json", DOB, ParameterType.RequestBody);
+                request.AddJsonBody(DOB);
+                client.Execute(request);
+
+                
+                //WriteToCsv(employeeList);
+
                 Console.WriteLine("Record updated!");
             }
             else
@@ -133,6 +169,7 @@ namespace EmployeeProgram
 
             return employeeList;
         }
+
 
         // OPTION 4
         /// <summary>

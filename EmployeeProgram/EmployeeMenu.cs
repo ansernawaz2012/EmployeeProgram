@@ -23,7 +23,7 @@ namespace EmployeeProgram
 
             //Initialize empty list containing employee objects
             List<Employee> employeeList = new List<Employee>();
-            _repository.GetData(employeeList);
+            employeeList = _repository.GetData(employeeList);
 
             //employeeList = GetEmployeeListFromAPI();
             Console.WriteLine("Welcome to the Employee program");
